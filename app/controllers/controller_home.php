@@ -11,11 +11,12 @@
 
         public function show_home(){
 
-            $cache = $this->helper("cache");
+            //$cache = $this->helper("cache");
 
-            $cache->add("var1", "test");
+            //$cache->add("var1", "test");
 
-            echo $cache->get("var2");
+            //echo $cache->get("var2");
+            VIEW::DRAW("index");
 
         }
 

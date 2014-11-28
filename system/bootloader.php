@@ -57,6 +57,7 @@
 
                break;
 
+
                // CHECK FOR MODULE
                default:
                     if(file_exists(SYSTEM_FOLDER."modules/".$mod."/controller_".$mod.".php")){
@@ -65,6 +66,7 @@
                     else
                         if(APPLICATION_DEBUG == true)
                             die("<b>MODULE ".$mod." not found!</b> &nbsp; <b>FILE:</b> <i>".__FILE__."</i> &nbsp; <b>LINE:</b> ".__LINE__);
+                        else die();
                break;
            }
         }

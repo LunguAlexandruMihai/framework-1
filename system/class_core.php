@@ -4,6 +4,8 @@
 	
 		var $internal_errors = array();
 
+
+        // load a helper
         public function helper($helper_name){
             // CHECK IF EXISTS
             if (file_exists(SYSTEM_FOLDER."helpers/helper_".$helper_name.".php")) {
@@ -14,6 +16,12 @@
                 $this->log_internal_errors(__FUNCTION__, __CLASS__, __FILE__, __LINE__, 'There is no helper <b>'.$helper_name."</b> in ".SYSTEM_FOLDER."helpers/helper_".$helper_name.".php");
                 return false;
             }
+        }
+
+
+        // check php module exists
+        public function php_module_exists($module_name){
+
         }
 
         protected function log_internal_errors($function, $class, $file, $line, $message = ''){
