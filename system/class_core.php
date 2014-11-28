@@ -4,9 +4,21 @@
 	
 		var $internal_errors = array();
 
-		
-		private function log_internal_errors($function, $file, $line, $message = ''){
+        public function helper($helper_name){
+            // CHECK IF EXISTS
+            if (file_exists(SYSTEM_FOLDER."helpers/helper_".$helper_name.".php")) {
+                include(SYSTEM_FOLDER."helpers/helper_".$helper_name.".php");
+                $helper_name = 'Helper'.ucfirst($helper_name);
+                return new $helper_name();
+            } else {
+                $this->log_internal_errors(__FUNCTION__, __CLASS__, __FILE__, __LINE__, 'There is no helper <b>'.$helper_name."</b> in ".SYSTEM_FOLDER."helpers/helper_".$helper_name.".php");
+                return false;
+            }
+        }
+
+        protected function log_internal_errors($function, $class, $file, $line, $message = ''){
 			$this->internal_errors[] = array(	"err_function" => $function,
+                                                "err_class" => $class,
 												"err_file" => $file,
 												"err_line" => $line,
 												"err_message" => $message
@@ -36,9 +48,9 @@
 					
 					
 					case "style":
-						$content = '<table style="width:100%;"><thead><tr><th>ERROR ID</th><th>FILE</th><th>LINE</th><th>FUNCTION</th><th>MESSAGE</th></tr></thead><tbody>';
+						$content = '<table style="width:100%;background-color: indianred;color:white;border:5px palevioletred solid;"><thead><tr><th>ERROR ID</th><th>FILE</th><th>LINE</th><th>FUNCTION</th><th>MESSAGE</th></tr></thead><tbody>';
 						foreach($this->internal_errors as $id => $info){
-							$content .= "<tr><td>".$id."</td><td>".$info['err_file']."</td><td>".$info['err_line']."</td><td>".$info['err_function']."</td><td>".$info['err_message']."</td></tr>";
+							$content .= "<tr><td><center>".$id."</center></td><td><center>".$info['err_file']."</center></td><td><center>".$info['err_line']."</center></td><td><center>".$info['err_function']."</center></td><td><center>".$info['err_message']."</center></td></tr>";
 						}
 						$content .= '</tbody></table>';
 						
@@ -63,7 +75,16 @@
                 }
 			}
 		}
-		
+
+
+        /*
+         *  SHOW LAST ERROR (only message)
+         */
+        public function show_error(){
+            if(!empty($this->internal_errors)){
+                return $this->internal_errors[count($this->internal_errors)-1]['err_message'];
+            } else return false;
+        }
 		
 		private function stylization_message($text, $background = 'red'){
 			return '<div style="width:100%;"><div style="width:90%;background-color:'.$background.';color:white;padding:10px;text-align:center;margin:20px auto 20px auto;">'.$text.'</div></div>';

@@ -10,7 +10,13 @@
 
 
         public function show_home(){
-            return $this->show_errors("style");
+
+            $cache = $this->helper("cache");
+
+            $cache->add("var1", "test");
+
+            echo $cache->get("var2");
+
         }
 
     }

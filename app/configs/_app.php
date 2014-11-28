@@ -10,4 +10,12 @@
 	*/
 	define("TEMPLATE_FOLDER", __DIR__."/template/");
 	
-	
+	/*
+	 *  CACHE FOLDER
+	 */
+    define("CACHE_FOLDER", APP_FOLDER."cache/");
+
+    /*
+     *  REPORT ERRORS ON EMAIL
+     */
+    define("APP_ERROR_REPORTING_EMAIL", false);

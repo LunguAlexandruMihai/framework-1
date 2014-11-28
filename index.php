@@ -9,7 +9,6 @@
 	define("APP_FOLDER", __DIR__."/app/");
 	define("SYSTEM_FOLDER", __DIR__."/system/");
 	define("CONTENT_FOLDER", __DIR__."/content/");
-	define("TEMPLATE_FOLDER", __DIR__."/template/");
 
 
 	
@@ -23,4 +22,4 @@
     $time_end = microtime(true);
     $time = $time_end - $time_start;
 
-    echo "Executed time: $time seconds\n";
+    //echo "Executed time: $time seconds\n";

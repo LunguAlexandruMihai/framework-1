@@ -20,7 +20,7 @@
 	*/
 	if(file_exists(SYSTEM_FOLDER."class_core.php")){
 		include(SYSTEM_FOLDER."class_core.php");
-		$c = new Core;
+		$app = new Core;
 	}
 	else
 		if(APPLICATION_DEBUG == true)
@@ -94,3 +94,8 @@
 		include(APP_FOLDER."routes.php");
 	}
 	
+
+    /*
+     *  DEBUG MODE
+     */
+    if(APPLICATION_DEBUG == true && count($app->internal_errors) != 0){ echo($app->show_errors("style")); }
