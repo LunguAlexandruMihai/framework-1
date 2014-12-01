@@ -1,6 +1,6 @@
 <?php
 
-if(!defined("SECURITY_INDEX")) die();
+
 /**
  * @package		SimpleImage class
  * @version		2.5.3
@@ -12,6 +12,8 @@ if(!defined("SECURITY_INDEX")) die();
  */
 namespace abeautifulsite;
 use Exception;
+
+if(!defined("SECURITY_INDEX")) die();
 /**
  * Class SimpleImage
  * This class makes image manipulation in PHP as simple as possible.

@@ -68,8 +68,19 @@
                 $view->configure("tpl_dir", SYSTEM_FOLDER."errors/");
                 die($view->draw($code));
             } else {
-                Url::call($call);
-                die();
+                // incercam sa apelam un controller sau functie
+                if(Url::call($call) == false){
+
+                    // daca s-a ajuns aici, inseamna ca se cere randarea unui viewer
+                    if(file_exists(APP_FOLDER."views/".$call.".html")){
+                        global $view;
+                        $view->draw($call);
+                    } else {
+                        die("Nu se poate randa eroarea!! ".__CLASS__." | ".__FILE__." | ".__LINE__);
+                        return false;
+                    }
+
+                }
             }
         }
 

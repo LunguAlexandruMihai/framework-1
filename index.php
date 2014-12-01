@@ -22,4 +22,4 @@
 
     $_time = microtime(true) - $_time;
 
-    echo "<br/>Executed time: $_time seconds<br/>";
+    //echo "<br/>Executed time: $_time seconds<br/>";

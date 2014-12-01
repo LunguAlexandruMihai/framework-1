@@ -20,6 +20,7 @@ class Url{
     // remind if routed successfully
     protected $routed = false;
 
+    public $on_404;
 
     // cand se initializeaza clasa, preluam ce se ceere
     function __construct(){
@@ -276,4 +277,8 @@ class Url{
 
     public function check_routed(){ if($this->routed == false) return false; else return true; }
 
+    public function set_404($do){
+        $this->on_404 = $do;
+        return true;
+    }
 }

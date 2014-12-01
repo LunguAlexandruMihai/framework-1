@@ -8,9 +8,10 @@
 
 class HomeModel {
 
-    public function hello(){
+    public function get_someting(){
 
-        echo "Se executa modelul: ".__CLASS__."->".__FUNCTION__."()";
+        // UNDER CONSTRUCT
+        return false;
 
     }
 

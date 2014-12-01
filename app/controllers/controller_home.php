@@ -10,6 +10,9 @@
 
         public function show_home(){
 
+            $this->view->assign("meta_title", "Framework");
+            $this->view->draw('view_home');
+
             /*
              *  CALL LANGUAGE
              * // load language

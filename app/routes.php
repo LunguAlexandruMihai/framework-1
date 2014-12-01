@@ -12,3 +12,5 @@
     */
     /*$url->get("profil/{id}[alnum]/", "home@show_home");*/
     $url->get("/", "home@show_home");
+
+    $url->set_404("404");

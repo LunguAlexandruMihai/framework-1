@@ -138,7 +138,10 @@
      *  CHECK IF ROUTED OR SHOW 404 ERROR
      */
     if($url->check_routed() == false){
-        $app->response(404);
+        if(empty($url->on_404))
+            $app->response(404);
+        else
+            $app->response(404, $url->on_404);
         die();
     }
 
