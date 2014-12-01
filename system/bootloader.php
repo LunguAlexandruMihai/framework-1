@@ -5,6 +5,11 @@
 	*/
 	if(!defined("SECURITY_INDEX")) die();
 
+    /*
+     *  START SESSION
+     */
+    session_start();
+    session_regenerate_id();
 
     /*
      *  INCLUDE APP CONFIG
@@ -25,7 +30,8 @@
 	else
 		if(APPLICATION_DEBUG == true)
 			die("<b>System Core not found!</b> &nbsp; <b>FILE:</b> <i>".__FILE__."</i> &nbsp; <b>LINE:</b> ".__LINE__);
-	
+        else die();
+
 
     /*
      *  INCLUDE APP MODULES
@@ -40,6 +46,7 @@
 
                        // LOAD AND CONNECT TO DATABASE
                        if(file_exists(APP_FOLDER."configs/_database.php")) {
+
                            include(SYSTEM_FOLDER."class_database.php");
 
                            $db = new database(include(APP_FOLDER."configs/_database.php"));
@@ -48,12 +55,13 @@
                        else
                            if(APPLICATION_DEBUG == true)
                                die("<b>DATABASE CONFIGURATION not found!</b> &nbsp; <b>FILE:</b> <i>".__FILE__."</i> &nbsp; <b>LINE:</b> ".__LINE__);
-
+                            else die();
 
                    }
                    else
                        if(APPLICATION_DEBUG == true)
                            die("<b>DATABASE CORE not found!</b> &nbsp; <b>FILE:</b> <i>".__FILE__."</i> &nbsp; <b>LINE:</b> ".__LINE__);
+                       else die();
 
                break;
 
@@ -74,6 +82,7 @@
     else
         if(APPLICATION_DEBUG == true)
             die("<b>APP MODULES not found!</b> &nbsp; <b>FILE:</b> <i>".__FILE__."</i> &nbsp; <b>LINE:</b> ".__LINE__);
+        else die();
 
 
 
@@ -88,14 +97,51 @@
     else
         if(APPLICATION_DEBUG == true)
             die("<b>URL CLASS not found!</b> &nbsp; <b>FILE:</b> <i>".__FILE__."</i> &nbsp; <b>LINE:</b> ".__LINE__);
+        else die();
+
+
+    // includem template engine-ul
+    if(file_exists(SYSTEM_FOLDER."class_template.php")){
+        include(SYSTEM_FOLDER."class_template.php");
+        $view = new RainTPL();
+        raintpl::configure("base_url", BASE_URL );
+        raintpl::configure("cache_dir", APP_FOLDER."cache/tmp/" );
+        raintpl::configure("tpl_dir", APP_FOLDER."views/" );
+        raintpl::configure("php_enabled", true );
+        raintpl::configure("path_replace", false );
+    }
+    else
+        if(APPLICATION_DEBUG == true)
+            die("<b>TEMPLATE CLASS not found!</b> &nbsp; <b>FILE:</b> <i>".__FILE__."</i> &nbsp; <b>LINE:</b> ".__LINE__);
+        else die();
+
+
+    // includem clasa cu functiile generale
+    if(file_exists(SYSTEM_FOLDER."class_functions.php")) {
+        include SYSTEM_FOLDER . "class_functions.php";
+    }
+
 
 	/*
 		INCLUDE ROUTES
 	*/
 	if(file_exists(APP_FOLDER."routes.php")){
 		include(APP_FOLDER."routes.php");
-	}
-	
+	} else {
+        if(APPLICATION_DEBUG == true)
+            die("<b>APP ROUTES not found!</b> &nbsp; <b>FILE:</b> <i>".__FILE__."</i> &nbsp; <b>LINE:</b> ".__LINE__);
+        else die();
+    }
+
+
+    /*
+     *  CHECK IF ROUTED OR SHOW 404 ERROR
+     */
+    if($url->check_routed() == false){
+        $app->response(404);
+        die();
+    }
+
 
     /*
      *  DEBUG MODE

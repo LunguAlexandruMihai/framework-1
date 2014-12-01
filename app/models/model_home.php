@@ -6,10 +6,12 @@
  * Time: 00:10
  */
 
-class model{
+class HomeModel {
 
     public function hello(){
-        echo "Merge modelu";
+
+        echo "Se executa modelul: ".__CLASS__."->".__FUNCTION__."()";
+
     }
 
 }

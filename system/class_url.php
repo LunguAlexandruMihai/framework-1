@@ -6,7 +6,7 @@
  * Time: 11:10
  */
 
-class Url extends Core{
+class Url{
 
     // current request uri
     public $request = '';
@@ -17,7 +17,8 @@ class Url extends Core{
     // full url
     public $current_url = '';
 
-
+    // remind if routed successfully
+    protected $routed = false;
 
 
     // cand se initializeaza clasa, preluam ce se ceere
@@ -76,13 +77,25 @@ class Url extends Core{
 
 
     /*
-     * Functia pentru Rutare
-     *
+     *  Functia pentru Rutare
+     *  => se asteapta prin get
      *
      */
     public function get($patern, $new)
     {
-        if($patern == '/'){ $patern = ''; }
+        // check if already routed
+        if($this->routed == true) return false;
+
+        // check if homepage
+        if($patern == '/'){
+            if($this->request == ""){
+                return $this->call($new);
+            } else {
+                return false;
+            }
+        }
+
+
         $patern = explode("/", $patern);
         $request = explode("/", $this->request);
 
@@ -200,52 +213,67 @@ class Url extends Core{
 
 
             // VEDEM CUM VREA USERUL SA FACEM REDIRECTAREA
-
-            // APELAM FUNCRIA DACA EXISTA
-            if(is_callable($new)){
-
-                echo call_user_func_array($new, $data);
-                return true;
-
-
-            } else {
-
-                $x = explode("@", $new);
-                if(count($x) == 2) {
-                    // INCERCAM SA APELAM O PROCEDURA DIN CONTROLLER
-                    if (file_exists(APP_FOLDER."controllers/controller_".$x[0].".php")){
-                        include(APP_FOLDER."controllers/controller_".$x[0].".php");
-                        $obj = new $x[0]();
-
-                        // include model
-                        if(file_exists(APP_FOLDER."models/model_".$x[0].".php"))
-                            include(APP_FOLDER."models/model_".$x[0].".php");
-
-                        // run controller
-                        echo call_user_func(array($obj, $x[1]));
-                    }
-
-
-                } else {
-                    return false;
-                }
-            }
+            return $this->call($new, $data);
 
 
 
-
-            /*
-            // PUT DATA TO GET
-            foreach ($data as $key => $val) {
-                $_GET[$key] = $val;
-            }
-
-            print_r($_GET);
-            */
         } else {
             // NOT MATCHING
             return false;
         }
 
     }
+
+    public function call($new, $data = array()){
+        // APELAM FUNCRIA DACA EXISTA
+        if(is_callable($new)){
+            $this->routed = true;
+            echo call_user_func_array($new, $data);
+            return true;
+
+
+        } else {
+
+            $x = explode("@", $new);
+            if(count($x) == 2) {
+                // INCERCAM SA APELAM O PROCEDURA DIN CONTROLLER
+                if (file_exists(APP_FOLDER."controllers/controller_".$x[0].".php")){
+                    include(APP_FOLDER."controllers/controller_".$x[0].".php");
+                    $nume = ucfirst($x[0])."Controller";
+                    $obj = new $nume();
+
+                    // include model
+                    if(file_exists(APP_FOLDER."models/model_".$x[0].".php")) {
+                        include(APP_FOLDER . "models/model_" . $x[0] . ".php");
+                        // creem numele modelului
+                        $nume = ucfirst($x[0])."Model";
+                        // creem instanta modelului
+                        $modelus = new $nume();
+                        global $db;
+                        $modelus->db = $db;
+
+                        // cuplam controllerul cu modelul
+                        $obj->model = $modelus;
+                    }
+
+                    global $view;
+                    $obj->view = $view;
+
+                    // check routed
+                    $this->routed = true;
+
+                    // run controller
+                    echo $obj->$x[1]();
+
+
+                } else return false;
+
+            } else return false;
+
+        }
+    }
+
+
+    public function check_routed(){ if($this->routed == false) return false; else return true; }
+
 }

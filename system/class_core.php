@@ -1,19 +1,45 @@
 <?php
 
+
 	class Core{
 	
-		var $internal_errors = array();
+		public $internal_errors = array();
 
+        public $lang;
 
         // load a helper
-        public function helper($helper_name){
+        public function helper($helper_name, $param = ''){
             // CHECK IF EXISTS
             if (file_exists(SYSTEM_FOLDER."helpers/helper_".$helper_name.".php")) {
-                include(SYSTEM_FOLDER."helpers/helper_".$helper_name.".php");
+                include SYSTEM_FOLDER."helpers/helper_".$helper_name.".php";
                 $helper_name = 'Helper'.ucfirst($helper_name);
-                return new $helper_name();
+
+                switch($helper_name) {
+                    case "HelperImages":
+                        return new abeautifulsite\HelperImages($param);
+                        break;
+                    case "HelperEmail":
+                        return new PHPMailer;
+                        break;
+                    default:
+                        return new $helper_name();
+                        break;
+                }
             } else {
                 $this->log_internal_errors(__FUNCTION__, __CLASS__, __FILE__, __LINE__, 'There is no helper <b>'.$helper_name."</b> in ".SYSTEM_FOLDER."helpers/helper_".$helper_name.".php");
+                return false;
+            }
+        }
+
+
+        // load language
+        public function set_lang($lang, $pack){
+            if(file_exists(APP_FOLDER."langs/".$lang."/".$pack.".php")) {
+                $this->lang = json_decode(json_encode(include(APP_FOLDER . "langs/" . $lang . "/" . $pack . ".php")));
+                return true;
+            } else {
+                if(APPLICATION_DEBUG == true)
+                    die("LANGUAGE FILE NOT FOUND !");
                 return false;
             }
         }
@@ -32,8 +58,22 @@
 												"err_message" => $message
 											);
 		}
-		
-		
+
+
+        // punem eroare
+		public function response($code, $call = 'default'){
+            http_response_code($code);
+            if($call == 'default'){
+                global $view;
+                $view->configure("tpl_dir", SYSTEM_FOLDER."errors/");
+                die($view->draw($code));
+            } else {
+                Url::call($call);
+                die();
+            }
+        }
+
+
 		/*
 			METHODS:
 				default - return array error

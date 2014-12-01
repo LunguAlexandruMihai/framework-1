@@ -1,10 +1,10 @@
 <?php
-
+    if(!defined("SECURITY_INDEX")) die();
 
     class HelperCache extends core{
 
         private $path = '';
-        private $prefix = 'helper_';
+        private $prefix = 'cache_';
         private $subfix = '.php';
 
         function __construct(){
@@ -16,7 +16,7 @@
          * daca json este TRUE salvam in format json (daca e array)
          */
         public function add($resource, $data){
-            $resource = $this->path.$this->prefix.md5($resource).$this->subfix;
+            $resource = $this->path.$this->prefix.md5(APP_SECRET_CODE.$resource).$this->subfix;
 
             if(is_array($data)){
                 $data = '<?php return '.json_encode($data).';';
@@ -37,7 +37,7 @@
          * daca json este TRUE, daca avem array returnam cu json
          */
         public function get($resource, $json=true){
-            $resource = $this->path.$this->prefix.md5($resource).$this->subfix;
+            $resource = $this->path.$this->prefix.md5(APP_SECRET_CODE.$resource).$this->subfix;
             // get cache resource value
             if(file_exists($resource)){
                 $content = include($resource);

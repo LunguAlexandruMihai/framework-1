@@ -216,3 +216,8 @@ pip-log.txt
 .mr.developer.cfg
 
 .idea/
+app/cache/*.php
+app/controllers/controller_*.php
+app/langs/*
+app/models/model_*.php
+app/views/*.php

@@ -1,0 +1,10 @@
+robert
+mihai
+danila
+smirghel
+idee
+telefon
+boxe
+mouse
+tastatura
+fotoliu

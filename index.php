@@ -1,6 +1,6 @@
 <?php
 
-    $time_start = microtime(true);
+    $_time = microtime(true);
 
 	/*	CHECK THAT THIS IS INDEX	*/
 	define("SECURITY_INDEX", true);
@@ -19,7 +19,7 @@
 	} else die();
 
 
-    $time_end = microtime(true);
-    $time = $time_end - $time_start;
 
-    //echo "Executed time: $time seconds\n";
+    $_time = microtime(true) - $_time;
+
+    echo "<br/>Executed time: $_time seconds<br/>";
